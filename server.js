@@ -19,7 +19,13 @@ app.use(express.json());
 
 // Rota para obter todos os carros
 app.get('/api/cars', async (req, res) => {
-  console.log('chegou aqui')
+  try {
+    const result = await pool.query('SELECT * FROM carros');
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Erro ao obter os carros:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
 });
 
 // Rota para excluir um carro pelo ID
